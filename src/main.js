@@ -15,6 +15,12 @@ function clearForm() {
   $('student-id').value = '';
 }
 
+function cell(tr, value) {
+  const td = document.createElement('td');
+  td.textContent = value ?? '';
+  tr.append(td);
+}
+
 function render() {
   const term = $('search').value.trim().toLowerCase();
   $('list').replaceChildren();
@@ -23,22 +29,29 @@ function render() {
       .toLowerCase().includes(term)
   );
   if (!visible.length) {
-    const li = document.createElement('li');
-    li.textContent = 'No matching records.';
-    $('list').append(li);
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 9;
+    td.textContent = 'No matching records.';
+    tr.append(td);
+    $('list').append(tr);
   }
   for (const s of visible) {
     const c = courses.find((x) => String(x.course_id) === String(s.course_id));
     const d = departments.find((x) =>
       String(x.department_id) === String(c?.department_id)
     );
-    const li = document.createElement('li');
-    const text = document.createElement('span');
-    text.textContent = `${s.student_no} | ${s.first_name} ${s.last_name}` +
-      ` | Year ${s.year_level} | ${s.email}` +
-      ` | ${c?.course_code ?? 'No course'}` +
-      ` | ${d?.department_name ?? 'No department'}` +
-      ` | Updated: ${s.updated_at}`;
+    const tr = document.createElement('tr');
+    cell(tr, s.student_no);
+    cell(tr, s.first_name);
+    cell(tr, s.last_name);
+    cell(tr, s.year_level);
+    cell(tr, s.email);
+    cell(tr, c?.course_code ?? 'No course');
+    cell(tr, d?.department_name ?? 'No department');
+    cell(tr, s.updated_at ? new Date(s.updated_at).toLocaleString() : '');
+
+    const actions = document.createElement('td');
     const edit = document.createElement('button');
     edit.type = 'button';
     edit.textContent = 'Edit';
@@ -65,8 +78,9 @@ function render() {
       await load();
       say('Student deleted.');
     };
-    li.append(text, edit, remove);
-    $('list').append(li);
+    actions.append(edit, remove);
+    tr.append(actions);
+    $('list').append(tr);
   }
 }
 

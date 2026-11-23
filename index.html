@@ -44,7 +44,24 @@
 <h2>Student list</h2>
 <label>Search name or student number <input id="search" /></label>
 <button id="refresh" type="button">Refresh list</button>
-<ul id="list"></ul>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Student No.</th>
+<th>First name</th>
+<th>Last name</th>
+<th>Year</th>
+<th>Email</th>
+<th>Course</th>
+<th>Department</th>
+<th>Updated</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="list"></tbody>
+</table>
+</div>
 
 <h2>Course report</h2>
 <p>Choose a course above, then click Count students.</p>
